@@ -2,3 +2,14 @@ site_name: My site
 site_url: https://mydomain.org/mysite
 theme:
   name: material
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_css:
+  - https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js
+  - js/math.js    # local init script (create under docs/js/math.js)
