@@ -37,24 +37,31 @@ So unlike:
 
 now optimization becomes a finite search problem with $O(N_k^2)$ complexity
 
-# Chapter 10: Approximate Inference
 
-Here we discuss deterministic approximation schemes. These schemas are based on approximation to the posterior distribution.
+## 9.2. Mixture of Gaussians
 
-Therefore, they will not be the exact result. 
+$$
+    \gamma(z_k) = \frac{\pi_k \mathcal{N}(\mathbf{x} \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\displaystyle \sum_{j=1}^{K} \pi_j \mathcal{N}(\mathbf{x} \mid \boldsymbol{\mu}_j, \boldsymbol{\Sigma}_j)}
+$$
 
-VI: variational inference / variational Bayes
+$\gamma(zk)$ is the corresponding **posterior** probability once we have observed $x$. 
+As we shall see later, $\gamma(zk)$ can also be viewed as the responsibility that component $k$ takes for ‘explaining’ the observation $x$.
 
-## 6.1 Variational Inference
+In the expectation step, or E step, we use the current values for the parameters to evaluate the posterior probabilities, or responsibilities $\gamma$
 
-Find derivative of the variation functions. 
+We then use these probabilities in the maximization step, or M step, to re-estimate the means, covariances, and mixing coefficients using the results (9.17), (9.19), and (9.22)
 
-functional: a mapping that takes a function as the input and returns the value of the functional as the output. e.g. $H(p) = \int p(x) \ln p(x) dx$
+9.17:
 
-functional derivative
+$$\boldsymbol{\mu}_k = \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk})\mathbf{x}_n$$
 
-an optimization problem in which the quantity being optimized is a functional.
+9.19:
 
-factorization assumption: we deliberately assume that a complicated probability distribution can be written as a product of simpler distributions
+$$
+\boldsymbol{\Sigma}_k = \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk})(\mathbf{x}_n - \boldsymbol{\mu}_k)(\mathbf{x}_n - \boldsymbol{\mu}_k)^\mathrm{T}
+$$
 
+9.22:
+
+$$\pi_k = \frac{N_k}{N}$$
 
