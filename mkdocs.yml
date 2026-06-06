@@ -5,6 +5,7 @@ theme:
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
+  - admonition
 
 extra_javascript:
   - js/mathjax-config.js
