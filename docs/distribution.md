@@ -117,3 +117,11 @@ Thus $A(\eta) = \ln\left( 1 - \sum_{k=1}^{M-1} \mu_k \right) = \ln (1+\sum_{k=1}
 - $u(x) = x$
 - $h(x) = 1$
 - $g(\eta) = \left(1 + \sum_{k=1}^{M-1} \exp(\eta_k)\right)^{-1}$
+
+# Prior
+
+| Distribution | Prior |
+| --- | --- |
+| Bernoulli | Beta |
+| multinomial | Dirichlet |
+
