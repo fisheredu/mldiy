@@ -67,5 +67,10 @@ E[(t - f_w(x))^2] &= E[(t-h(x))^2] + E[(h(x)-f_w(x))^2] + 2E[(t-h(x))(h(x)-f_w(x
 &= \mathrm{Noise\ term} + \mathrm{Bias}^2 + \mathrm{Model\ Variance}
 \end{aligned}
 
+!!! warning "In real life"
+    In real life we cannot compute $h(x)$ (real function). 
 
-
+| $\lambda$ | Train error | Test error |
+| --- | --- | --- |
+| smaller | down | unclear |
+| larger | up | unclear |
