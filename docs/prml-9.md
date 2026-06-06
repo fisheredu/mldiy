@@ -65,3 +65,6 @@ $$
 
 $$\pi_k = \frac{N_k}{N}$$
 
+There will generally be multiple local maxima of the log likelihood function, and that EM is not guaranteed to find the largest of these maxima.
+
+
