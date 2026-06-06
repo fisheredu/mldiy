@@ -105,3 +105,28 @@ Note $z_n$ is a K-dimensional one-hot vector. The complete-data log liklihood fu
 ### 9.3.2. Relation to K-means
 
 K-means perform hard assignment of data points to clusters, while EM makes soft assignment based on posterior probability. 
+
+## 9.4. EM in general
+
+$$
+\ln p(X\mid \theta) = \mathcal{L}(q,\theta) + KL(q\| p)
+$$
+
+$KL(q\| p)$ is the Jullback-Leibler divergence between $q(Z)$ and posterior $p(Z\mid X,\theta)$
+
+![E-step](images/e-step.png)
+![M-step](images/m-step.png)
+
+### EM in MAP
+
+```latex
+\begin{aligned}
+\ln p(\theta \mid x) &= \ln p(\theta, x) - \ln p(x) \\
+&= \ln p(x \mid \theta) + \ln p(\theta) - \ln p(x) \\
+&= \mathcal{L}(q,\theta) + KL(q\| p) + \ln p(\theta) - \ln p(x) \\
+&\ge \mathcal{L}(q,\theta) + \ln p(\theta) - \ln p(x)
+\end{aligned}
+```
+
+
+
