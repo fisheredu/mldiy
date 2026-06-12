@@ -55,5 +55,5 @@ r^B(x) &= \mathbb{I}_{\max_{y \in \mathcal{Y}} \eta_y(x) \leq \mathbb{P}(Y=M \mi
 \end{aligned}
 \]
 
-
+![l2d](images/l2d.png)
 

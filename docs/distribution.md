@@ -125,3 +125,6 @@ Thus $A(\eta) = \ln\left( 1 - \sum_{k=1}^{M-1} \mu_k \right) = \ln (1+\sum_{k=1}
 | Bernoulli | Beta |
 | multinomial | Dirichlet |
 
+# Mode
+
+a mode is the value or point in a distribution where the probability is at its maximum. 
