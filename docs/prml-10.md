@@ -6,7 +6,7 @@ Therefore, they will not be the exact result.
 
 VI: variational inference / variational Bayes
 
-## 6.1 Variational Inference
+## 10.1 Variational Inference
 
 Find derivative of the variation functions. 
 
@@ -34,11 +34,17 @@ where
 - X = observed data
 - Z = latent variables (or parameters in fully Bayesian setting)
 
+Note that here we use fully-bayesian notation so no $\theta$
+
 ### The 2 Goals
 
-Goal 1: Approximate the posterior $p(Z\mid X)$. Given observed data, what do we believe about the latent variables? This is inference: updating beliefs about the unknowns
+_Goal 1: Approximate the posterior $p(Z\mid X)$._
 
-Goal 2: Compute the model evidence $p(X)$ How likely is the observed data under this model?
+Given observed data, what do we believe about the latent variables? This is inference: updating beliefs about the unknowns
+
+_Goal 2: Compute the model evidence $p(X)$_
+
+How likely is the observed data under this model?
 This is marginal likelihood: integrating out all unknowns. Useful for model comparison
 
 !!! warning
@@ -48,14 +54,21 @@ This is marginal likelihood: integrating out all unknowns. Useful for model comp
 
 When you make your approximating distribution $q(Z)$ more flexible, you don't overfit. You just get closer to the true posterior $p(Z\mid X)$.
 
-In variational inference, you're solving a fixed mathematical problem, not learning a generalizable pattern. You have your observed data $X$ (all of it). You have your model $p(X,Z)$
+<details>
+<summary>
+    Approximate, not generaliza
+</summary>
+In variational inference, you're solving a fixed mathematical problem, not learning a generalizable pattern. You have your observed data \(X\) (all of it). You have your model \(p(X,Z)\) </br>
 
-The true posterior $p(Z\mid X)$ is completely determined by these two things
+The true posterior \(p(Z\mid X)\) is completely determined by these two things </br>
 
 Your job: approximate that fixed target as closely as possible. There's nothing to "generalize to"—you just want a good approximation
+</details>
+
+
 
 <details>
-<summary>Proof</summary
+<summary>q With Factorization Assumption</summary>
 ```latex
 \begin{equation}
 \begin{aligned}

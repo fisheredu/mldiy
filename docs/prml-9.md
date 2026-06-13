@@ -116,6 +116,8 @@ $$
 \log p(x) = \underbrace{\int q(z) \log \left\{ \frac{p(x,z)}{q(z)} \right\} dZ}_{\mathcal{L}(q)}\underbrace{-\int q(z) \left\{ \frac{p(z\mid x)}{q(z)} \right\} dz}_{D_{KL}(q \| p(z \mid x))}
 \end{equation}
 
+Here $\mathcal{L}$ is ELBO (Evidence Lower Bound). It is also called elbow
+
 !!! note
     $D_{KL}$ is minused
 
@@ -126,14 +128,20 @@ $KL(q\| p)$ is the Jullback-Leibler divergence between $q(Z)$ and posterior $p(Z
 
 ### EM in MAP
 
-```latex
+
 \begin{aligned}
 \ln p(\theta \mid x) &= \ln p(\theta, x) - \ln p(x) \\
 &= \ln p(x \mid \theta) + \ln p(\theta) - \ln p(x) \\
 &= \mathcal{L}(q,\theta) + KL(q\| p) + \ln p(\theta) - \ln p(x) \\
 &\ge \mathcal{L}(q,\theta) + \ln p(\theta) - \ln p(x)
 \end{aligned}
-```
+
+
+## Reference
+
+[Tübingen](https://uni-tuebingen.de/en/fakultaeten/mathematisch-naturwissenschaftliche-fakultaet/fachbereiche/informatik/lehrstuehle/methoden-des-maschinellen-lernens/lehre/probabilistic-machine-learning/)
+
+PRML
 
 
 
