@@ -65,23 +65,52 @@ The true posterior \(p(Z\mid X)\) is completely determined by these two things <
 Your job: approximate that fixed target as closely as possible. There's nothing to "generalize to"—you just want a good approximation
 </details>
 
+- We have a model $p(X, Z \mid \theta)$ and want to find a good approximation to posterior $p(Z \mid X)$
+- We invent a family of distribution $q(Z)$ and optimize the ELBO (Evidence Lower Bound)
 
+\begin{equation}
+\begin{aligned}
+\mathcal{L}({\color{red}q}(z \mid \theta))
+&=
+\mathbb{E}_{{\color{red}q}(z \mid \theta)}
+\left[
+\log \frac{p(x,z \mid \theta)}{{\color{red}q}(z)}
+\right] \\
+&=
+\mathbb{E}_{{\color{red}q}(z \mid \theta)}
+\left[
+\log p(x,z \mid \theta)
+\right]
+-
+H[{\color{red}q}(z \mid \theta)]
+\end{aligned}
+\end{equation}
+
+- To make the computation trackable, we retrict the family of ${\color{red}q}(z \mid \theta)$
+
+### Impose Factorization Assumption
+
+Factorization amounts to independence assumption. By imposing factorization, the assumed posterior may be tractable. (also called mean field approximation)
+
+$$
+q(Z) = \prod_{i=1}^M q(Z_i)
+$$
 
 <details>
 <summary>q With Factorization Assumption</summary>
-```latex
+
 \begin{equation}
 \begin{aligned}
 \mathcal{L}(q) = \int q(Z) \ln \left\{ \frac{p(X,Z)}{q(Z)} \right\} dZ
 \end{aligned}
 \end{equation}
-```
+
 
 The assumption we made is factorization assumption
 
-$$
+\[
 q(Z) = \prod _{i=1}^M q_i(Z_i)
-$$
+\]
 
 Starting from line 1:
 
@@ -95,7 +124,7 @@ Split the curly brace into two terms:
 \mathcal{L}(q) = \underbrace{\int \prod_i q_i \, \ln p(\mathbf{X}, \mathbf{Z}) \, d\mathbf{Z} }_{\text{Term A}} - \underbrace{\int \prod_i q_i \sum_i \ln q_i \, d\mathbf{Z}}_{\text{Term B}}
 \end{equation}
 
-Integrate out all variables $\mathbf{Z}_i$ with $i \neq j$ first, leaving a function of $\mathbf{Z}_j$:
+Let's focus on a particular variable \(z_j\). Integrate out all variables \(\mathbf{Z}_i\) with \(i \neq j\) first, leaving a function of \(\mathbf{Z}_j\):
 
 \begin{equation}
 \int \prod_i q_i \, \ln p(\mathbf{X}, \mathbf{Z}) \, d\mathbf{Z}
@@ -109,7 +138,7 @@ Bring the integral inside the sum:
 = \sum_i \int \prod_k q_k \, \ln q_i \, d\mathbf{Z}
 \end{equation}
 
-For each term in the sum, every factor $q_k$ with $k \neq i$ integrates to 1:
+For each term in the sum, every factor \(q_k\) with \(k \neq i\) integrates to 1:
 
 \begin{equation}
 \int \prod_k q_k \, \ln q_i \, d\mathbf{Z}
@@ -124,18 +153,25 @@ So Term B collapses to:
 = \int q_j \ln q_j \, d\mathbf{Z}_j + \sum_{i \neq j} \int q_i \ln q_i \, d\mathbf{Z}_i
 \end{equation}
 
-Since we optimize only with respect to $q_j$, the second sum is constant.
+Since we optimize only with respect to \(q_j\), the second sum is constant.
 
 \begin{equation}\label{eq:loss}
-\mathcal{L}(q) = \int q_j \left\{ \int \ln p(\mathbf{X}, \mathbf{Z}) \prod_{i \neq j} q_i \, d\mathbf{Z}_i \right\} d\mathbf{Z}_j - \int q_j \ln q_j \, d\mathbf{Z}_j + \text{const}
+\begin{aligned}
+&\mathcal{L}(q)\\ 
+&= \int q_j \left\{ {\color{red} \int \ln p(\mathbf{X}, \mathbf{Z}) \prod_{i \neq j} q_i \, d\mathbf{Z}_i }\right\} d\mathbf{Z}_j - \int q_j \ln q_j \, d\mathbf{Z}_j + \text{const} \\
+&= \int q_j {\color{red} \log \tilde{p}(x, z_j) } d\mathbf{Z}_j - \int q_j \ln q_j \, d\mathbf{Z}_j + \text{const} \\
+&= - D_{\mathrm{KL}} (q_j(z_j) \| \tilde{p}(x, z_j)) + \text{const} \\
+\end{aligned}
 \end{equation}
+
+The red part is a function of \(x\) and \(z_j\). Because all \(z_i\) where \(i \neq j\) are integrated out.
 
 Remember that 
 \begin{equation}
-D_{KL}(P \| Q) = \int P(x) \ln \frac{P(x)}{Q(x)} dx = - \int P(x) \ln Q(x) dx + \int P(x) \ln P(x) dx
+D_{KL}(P \| Q) = - \int P(x) \ln Q(x) dx + \int P(x) \ln P(x) dx
 \end{equation}
 
-We can see that \(\eqref{eq:loss}\) match this, with $$P(x) = q_j(Z_j)$$ and $$Q(x) = \exp(\mathbb{E}_{i\neq j}[\ln p(X,Z)])$$
+We can see that \(\eqref{eq:loss}\) match this, with \(P(x) = q_j(Z_j)\) and \(Q(x) = \exp(\mathbb{E}_{i\neq j}[\ln p(X,Z)])\)
 </details>
 
 The optimal solution for $q_j$ is
@@ -146,6 +182,10 @@ q_j^* = \exp(\mathbb{E}_{i\neq j}[\ln p(X,Z)] + \mathrm{const}) = \exp\left( \in
 
 It says that the log of the optimal solution for factor \(q_j\) is obtained simply by considering the log of the joint distribution over all hidden and visible variables and then taking the expectation with respect to all of the other factors \(\{q_i\}\) for \(i \neq j\)
 
+
+## Application in Mixture of Gaussian
+
+How we decide $K$ (number of components)?
 
 
 
