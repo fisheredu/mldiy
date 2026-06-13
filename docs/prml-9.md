@@ -112,6 +112,13 @@ $$
 \ln p(X\mid \theta) = \mathcal{L}(q,\theta) + KL(q\| p)
 $$
 
+\begin{equation}
+\log p(x) = \underbrace{\int q(z) \log \left\{ \frac{p(x,z)}{q(z)} \right\} dZ}_{\mathcal{L}(q)}\underbrace{-\int q(z) \left\{ \frac{p(z\mid x)}{q(z)} \right\} dz}_{D_{KL}(q \| p(z \mid x))}
+\end{equation}
+
+!!! note
+    $D_{KL}$ is minused
+
 $KL(q\| p)$ is the Jullback-Leibler divergence between $q(Z)$ and posterior $p(Z\mid X,\theta)$
 
 ![E-step](images/e-step.png)

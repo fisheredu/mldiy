@@ -13,9 +13,9 @@ Find derivative of the variation functions.
 !!!note 
     **functional**: a mapping that takes a function as the input and returns the value of the functional as the output. e.g. $H(p) = \int p(x) \ln p(x) dx$
 
-functional derivative: expresses how the value of the functional changes in response to infinitesimal changes to the input function.
+**functional derivative**: expresses how the value of the functional changes in response to infinitesimal changes to the input function.
 
-an optimization problem in which the quantity being optimized is a functional.
+Today we are interested in an optimization problem in which the quantity being optimized is a **functional**.
 
 Why it finds approximate solution: we restrict the range of functions over which the optimization is performed.
 
@@ -79,7 +79,7 @@ Starting from line 1:
 Split the curly brace into two terms:
 
 \begin{equation}
-\mathcal{L}(q) = \underbrace{\int \prod_i q_i \, \ln p(\mathbf{X}, \mathbf{Z}) \, d\mathbf{Z}}_{\text{Term A}} - \underbrace{\int \prod_i q_i \sum_i \ln q_i \, d\mathbf{Z}}_{\text{Term B}}
+\mathcal{L}(q) = \underbrace{\int \prod_i q_i \, \ln p(\mathbf{X}, \mathbf{Z}) \, d\mathbf{Z} }_{\text{Term A}} - \underbrace{\int \prod_i q_i \sum_i \ln q_i \, d\mathbf{Z}}_{\text{Term B}}
 \end{equation}
 
 Integrate out all variables $\mathbf{Z}_i$ with $i \neq j$ first, leaving a function of $\mathbf{Z}_j$:
