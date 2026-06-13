@@ -188,4 +188,9 @@ It says that the log of the optimal solution for factor \(q_j\) is obtained simp
 How we decide $K$ (number of components)?
 
 
+### 10.1.2 Property and inaccuracy of factorized Gaussians
+
+
+
+
 

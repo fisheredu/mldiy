@@ -128,3 +128,13 @@ Thus $A(\eta) = \ln\left( 1 - \sum_{k=1}^{M-1} \mu_k \right) = \ln (1+\sum_{k=1}
 # Mode
 
 a mode is the value or point in a distribution where the probability is at its maximum. 
+
+# Precision Matrix
+
+The precision matrix is the inverse of covariance matrix of a multivariate Gaussian
+
+$$
+\Lambda = \Sigma^{-1}
+$$
+
+It measures how concentrated and certain the distribution is. In 1-D it's reciprocal of variance $\lambda = 1/\sigma^2$
