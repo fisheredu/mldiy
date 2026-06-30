@@ -31,16 +31,24 @@ $$
 
 where 
 
-- X = observed data
-- Z = latent variables (or parameters in fully Bayesian setting)
+- X = observed data. Assume $X = (x_1, x_2, ..., x_n)$, $x_i$ will be the i-th image, sentence, measurement
+- Z = latent variables (hidden variables) (or parameters in fully Bayesian setting)
 
-Note that here we use fully-bayesian notation so no $\theta$
+Note that here we use fully-bayesian (hidden variables $z$ include model parameter $\theta$, $z = (\theta, \mathrm{other\ latent\ variables})$) notation so no $\theta$. But there may be fixed hyperparameter $\alpha$
 
 ### The 2 Goals
 
 _Goal 1: Approximate the posterior $p(Z\mid X)$._
 
 Given observed data, what do we believe about the latent variables? This is inference: updating beliefs about the unknowns
+
+$p(z \mid x, \alpha) = \frac{p(z, x \mid \alpha)}{\int_z p(z, x \mid \alpha) dz}$
+
+Why we are interested in this: **predictive distribution**
+
+!!! info
+    predictive distribution is $p(x_{\mathrm{new} \mid x, \alpha})$. It answers "given the data we already observed $x$, what's the probability distribution of a new future observation $x_{\mathrm{new}}$?". The formula is $p(x_{\mathrm{new}} \mid x, \alpha) = \int p(x_{\mathrm{new}}, z \mid x, \alpha) dz = \int p(x_{\mathrm{new}} \mid z, \alpha) p(z \mid x, \alpha) dz$
+
 
 _Goal 2: Compute the model evidence $p(X)$_
 
@@ -49,6 +57,11 @@ This is marginal likelihood: integrating out all unknowns. Useful for model comp
 
 !!! warning
     This is generative models: You have unlabeled data; you learn the underlying structure. It is not classifier
+
+The main idea behind variational methods is to pick a family of distributions over the latent variables $z$ with its own **variational parameter**
+
+!!! info
+    variational parameter: the parameters of an approximate posterior distribution.
 
 **Claim: Using more flexible approximations simply allows us to approach the true posterior distribution more closely.**
 
@@ -186,6 +199,8 @@ It says that the log of the optimal solution for factor \(q_j\) is obtained simp
 ## Application in Mixture of Gaussian
 
 How we decide $K$ (number of components)?
+
+$z_i \sim \mathrm{Mult}(\pi)$
 
 
 ### 10.1.2 Property and inaccuracy of factorized Gaussians

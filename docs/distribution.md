@@ -138,3 +138,15 @@ $$
 $$
 
 It measures how concentrated and certain the distribution is. In 1-D it's reciprocal of variance $\lambda = 1/\sigma^2$
+
+# KL-divergence
+
+\begin{equation}
+\mathrm{KL}(q \| p) = \int q(x) \ln \frac{q(x)}{p(x)} dx = \mathbb{E}_q \left[ \ln \frac{q(x)}{p(x)} \right]
+\end{equation}
+
+- If q is high and p is high then we are happy.
+- If q is high and p is low then we pay a price.
+- If q is low then we don’t care (because of the expectation)
+
+

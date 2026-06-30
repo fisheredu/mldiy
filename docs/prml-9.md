@@ -118,6 +118,13 @@ $$
 
 Here $\mathcal{L}$ is ELBO (Evidence Lower Bound). It is also called elbow
 
+\begin{equation}
+\begin{aligned}
+\mathcal{L}(q) &= \int q(z) \log\left\{ \frac{p(z\mid x)}{q(z)} \right\} dz + \log p(x) \\
+&= \sum_{j=1}^m \mathbb{E}[\log p(z_j \mid z_{1:(j-1)}, x_{1:n})] - \sum_{j=1}^m \mathbb{E}_j [\log q(z_j)] + \log p(x_{1:n})
+\end{aligned}
+\end{equation}
+
 !!! note
     $D_{KL}$ is minused
 
