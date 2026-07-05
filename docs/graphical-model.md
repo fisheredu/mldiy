@@ -9,31 +9,35 @@ In a probabilistic graphical model, each node represents a random variable (or g
 - factor graph
 
 $$
-p(1)
+p(x_1, \ldots, x_n) = \prod_{i=1}^n p(x_i \mid \mathrm{pa}(x_i)) = p(x_n \mid x_1, \ldots, x_{n-1}) \ldots p(x_2 \mid x_1) p(x_1)
 $$
 
+??? note "Tip"
+    ## Drawing graphical models
 
-## Drawing graphical models
+    For this MkDocs site, the easiest code-based option is a Mermaid diagram in a Markdown code fence.
 
-For this MkDocs site, the easiest code-based option is a Mermaid diagram in a Markdown code fence.
+    ### Bayesian network
 
-### Bayesian network
+    ``` mermaid
+    graph LR
+    Cloudy((Cloudy))
+    Sprinkler((Sprinkler))
+    Rain((Rain))
+    WetGrass((Wet grass))
 
-``` mermaid
-graph LR
-  Cloudy((Cloudy))
-  Sprinkler((Sprinkler))
-  Rain((Rain))
-  WetGrass((Wet grass))
+    Cloudy --> Sprinkler
+    Cloudy --> Rain
+    Sprinkler --> WetGrass
+    Rain --> WetGrass
+    ```
 
-  Cloudy --> Sprinkler
-  Cloudy --> Rain
-  Sprinkler --> WetGrass
-  Rain --> WetGrass
-```
+    This represents the factorization
 
-This represents the factorization
+    $$
+    p(C, S, R, W) = p(C)p(S \mid C)p(R \mid C)p(W \mid S, R).
+    $$
 
-$$
-p(C, S, R, W) = p(C)p(S \mid C)p(R \mid C)p(W \mid S, R).
-$$
+The **absence** of links in the graph that conveys interesting information about the properties of the class of distributions that the graph represents.
+
+

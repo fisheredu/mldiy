@@ -11,6 +11,7 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - admonition
+  - pymdownx.details
 
 extra_javascript:
   - js/mathjax-config.js
