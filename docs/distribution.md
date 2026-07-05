@@ -1,5 +1,25 @@
 # Distribution
 
+## Gaussian distribution
+
+$$
+\mathcal{N}(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left\{-\frac{(x-\mu)^2}{2\sigma^2}\right\}
+$$
+
+For a Gaussian over a vector $\mathbf{x} \in \mathbb{R}^D$:
+
+$$
+\mathcal N(\mathbf{x} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})
+=
+\frac{1}{(2\pi)^{D/2} |\boldsymbol{\Sigma}|^{1/2}}
+\exp\left(
+-\frac{1}{2}
+(\mathbf{x}-\boldsymbol{\mu})^\top
+\boldsymbol{\Sigma}^{-1}
+(\mathbf{x}-\boldsymbol{\mu})
+\right)
+$$
+
 ## Exponential Family
 
 The exponential family of distribution over $x$, given some parameters $\eta$, is defined to be the set of distributions of the form

@@ -10,9 +10,19 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: graphviz
+          class: graphviz
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - admonition
   - pymdownx.details
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra_css:
+  - stylesheets/graphical-model.css
 
 extra_javascript:
+  - https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js
+  - js/graphviz-render.js
   - js/mathjax-config.js
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

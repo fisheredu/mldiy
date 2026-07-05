@@ -1,0 +1,9 @@
+.graphviz-rendered svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.graphviz-error {
+  color: #b00020;
+  white-space: pre-wrap;
+}
