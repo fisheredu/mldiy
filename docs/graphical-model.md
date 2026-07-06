@@ -1,6 +1,7 @@
 # Graphical Model
 
-- [ ] 8.1. Bayesian Networks
+- [X] 8.1. Bayesian Networks
+- [ ] 8.1.2 Generative models
 
 A graph comprises **nodes** (also called vertices) connected by **links** (also known as edges or arcs). 
 
@@ -133,47 +134,76 @@ digraph G {
 - random variable denoted by open circles
 - deterministic parameters denoted by smaller solid circles
 
-```graphviz
-digraph G {
-  rankdir=RL;
+![polynomial regression model](images/poly-regression-model.png)
 
-  graph [fontname="Helvetica"];
-  node [fontname="Helvetica"];
-  edge [color=red, penwidth=3];
+**ancestral sampling**: a way to generate samples from a probabilistic graphical model by sampling variables in causal/topological order: parents first, children later.
 
-  node [
-    shape=circle,
-    style=filled,
-    fillcolor=white,
-    color=red,
-    penwidth=3
-  ];
+**generative models**: graphical models that capture the _causal process_
 
-  w [label="w"];
-  tn [label=<t<SUB>n</SUB>>];
+### Discrete Variables
 
-  node [
-    shape=plaintext,
-    style="",
-    color=none,
-    penwidth=0
-  ];
+$$
+p(x \mid \mu) = \prod_{k=1}^K \mu_k^{x_k}
+$$
 
-  sigma [label=<σ<SUP>2</SUP>>];
-  xn [label=<x<SUB>n</SUB>>];
-  alpha [label="α"];
+here $\mathbf{x} = (x_1, x_2, \dots, x_K)$
 
-  subgraph cluster_plate {
-    label="N";
-    color=blue;
-    penwidth=3;
-    xn;
-    tn;
-  }
+where
 
-  sigma -> tn;
-  xn -> tn;
-  w -> tn;
-  alpha -> w;
-}
-```
+$$
+x_k =
+\begin{cases}
+1, & \text{if } \mathbf{x} \text{ is in state } k, \\
+0, & \text{otherwise.}
+\end{cases}
+$$
+
+For arbitary joint distribution over $M$ variables (each of which has $K$ states), the parameters that must be specified is $K^M-1$.
+
+If all $M$ variables are independent, the total number of parameters would be $M(K-1)$.
+
+Readers can see that we trade parameters for restricted class of distributions.
+
+!!! info "Number of parameters"
+    how to reduce number of independent parameters: 
+    
+    sharing parameters + restrict distribution + use parameterized models for the conditional distributions
+
+### Linear-Gaussian models
+
+Consider an arbitrary directed acyclic graph over D variables in which node $i$ represents a single continuous random variable $x_i$ having a Gaussian distribution. The mean of this distribution is taken to be a linear combination of the states of its parent nodes $pa_i$ of node $i$.
+
+$$
+p(x_i \mid \mathrm{pa}_i) = \mathcal{N}\left(x_i \;\middle|\; \sum_{j \in\mathrm{pa}_i} w_{ij} x_j + b_i, v_i\right)
+$$
+
+Thus by product rule
+
+\begin{aligned}
+\ln p(\mathbf{x}) 
+&= \sum_{i=1}^{D} \ln p(x_i \mid \mathrm{pa}_i) \\
+&= -\sum_{i=1}^{D} \frac{1}{2v_i}\left(x_i-\sum_{j \in \mathrm{pa}_i} w_{ij}x_j-b_i\right)^2+ \mathrm{const}
+\end{aligned}
+
+Since $\mathbf{x} = (x_1, \ldots, x_D)$, $p(\mathbf{x})$ is a multivariate Gaussian.
+
+Since $x_i$ conditioned on parents is a Gaussian distribution, we can express $x_i$ as
+
+$$
+x_i = \sum_{j \in \mathrm{pa}_i} w_{ij} x_j + b_i + \sqrt{v_i}\epsilon_i
+$$
+
+Recursive expectation relation:
+
+$$
+\mathbb{E}[x_i] = \sum_{j \in \mathrm{pa}_i} {\color{red}w_{ij}} \mathbb{E}[x_j] + {\color{blue}b_i}
+$$
+
+Recursive covariance relation:
+
+$$
+\mathrm{cov}[x_i, x_j] = \sum_{k \in \mathrm{pa}_j} {\color{red}w_{jk}} \mathrm{cov}[x_i, x_k] + I_{ij}{\color{blue}v_j}
+$$
+
+a prior over hyperparameter: _hyperprior_
+
