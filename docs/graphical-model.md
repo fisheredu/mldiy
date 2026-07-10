@@ -22,6 +22,14 @@ $$
 
 $\mathrm{pa}(x_i)$ denotes the set of parents of $x_i$
 
+We call this **directed factorization property**. A graph describes a set of conditional independence properties.
+
+![filter](images/image-1.png)
+
+the set of distributions $\mathcal{DF}$ will include any distributions that have **additional** independence properties beyond those described by the graph.
+
+The more independence properties a distributions has, the harder it get filtered out.
+
 ??? note "Tip"
     <h3>Drawing graphical models</h3>
 
@@ -207,3 +215,55 @@ $$
 
 a prior over hyperparameter: _hyperprior_
 
+## Conditional Independence
+
+a is conditionally independent of b given c
+
+$$
+a \perp \!\!\! \perp b \mid c
+$$
+
+equivalent to 
+
+$$
+p(a, b \mid c) = {\color{blue}p(a \mid b, c)}p(b \mid c) = {\color{blue}p(a \mid c)}p(b \mid c)
+$$
+
+## d-separation criteria
+
+### tail-to-tail
+
+### head-to-tail
+
+observe $c$ "blocks" the path from $a$ to $b$
+
+### head-to-head
+
+conditioning induce a dependency
+
+When node c is unobserved, it ‘blocks’ the path, and the variables a and b are independent. However, conditioning on c ‘unblocks’ the path and renders a and b dependent.
+
+#### Naïve Bayes
+
+Naïve bayes model is a graphical structure arises in an approach to classification. We use independence assumption to simplify the model structure.
+
+Observed input is $\mathbf{x} = (x_1, \ldots, x_D)^T$ and we wish to classify it into $K$ classes. We represent these $K$ classes by 1-of-K encoding scheme (one-hot). 
+
+We can define a generative model by introducing **a multinomial prior** $p(z \mid \mu)$ over the class labels, where kth component $\mu_k$ of $\mu$ is the prior probability of class $C_k$, together with a **conditional distribution** $p(\mathbf{x} \mid z)$ for observed vector $\mathbf{x}$
+
+The key assumption is that conditioned on $z$, the distribution of $x_1, \ldots, x_D$ is independent. However, the marginal density $p(x)$ will not factorize with respect to the components of $\mathbf{x}$. 
+
+![naive bayes](images/naive-bayes.png)
+
+The only latent variable is usually the class label, so conditionally independent. But do **not** need to be identical distributed.
+
+Naive Bayes is useful when
+
+- $D$ is high
+- input vector $\mathbf{x}$ contains both discrete and continuous variables
+
+### Markov blanket
+
+The set of nodes comprising the parents, the children and the **co-parents** is called the Markov blanket, which is the minimal set of nodes that isolates $x_i$ from the rest of the graph.
+
+![blanket](images/image-2.png)
