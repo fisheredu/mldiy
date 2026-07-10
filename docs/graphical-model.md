@@ -1,7 +1,8 @@
 # Graphical Model
 
 - [X] 8.1. Bayesian Networks
-- [ ] 8.1.2 Generative models
+- [X] 8.2 Conditional Independence
+- [ ] 8.3 Markov Random Field
 
 A graph comprises **nodes** (also called vertices) connected by **links** (also known as edges or arcs). 
 
@@ -271,3 +272,23 @@ Naive Bayes is useful when
 The set of nodes comprising the parents, the children and the **co-parents** is called the Markov blanket, which is the minimal set of nodes that isolates $x_i$ from the rest of the graph.
 
 ![blanket](images/image-2.png)
+
+## Markov Random Fields
+
+A Markov random field, also known as a _Markov network_ or an _undirected graphical model_
+
+Denote a clique by $C$ and the set of variables in that clique by $\mathbf{x}_C$. The joint distribution is a product of **potential function** $\psi_C(\mathbf{x}_C)$ over the maximal clique**s** of the graph.
+
+$$
+p(\mathbf{x}) = \frac{1}{Z}\prod_C \psi_C(\mathbf{x}_C)
+$$
+
+Here $Z= \sum_\mathbf{x}  \prod_C \psi_C(\mathbf{x}_C)$ is the normalization constant.
+
+$Z$ is needed for parameter learning as $\nabla_\theta \log p(x;\theta)=\sum_C \nabla_\theta \log \psi_C(x_C;\theta)-{\color{blue}\nabla_\theta \log Z(\theta)}$
+
+$Z$ is not needed in conditional distribution $p(x_i\mid x_{-i})$
+
+!!! warning "No interpretation"
+    We do not restrict the choice of potential functions to those that have a specific probabilistic interpretation as marginal or conditional distributions.
+
