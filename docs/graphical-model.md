@@ -233,15 +233,19 @@ $$
 
 ### tail-to-tail
 
-### head-to-tail
+![t2t](images/image-3.png)
 
+### head-to-tail
+![h2t](images/image-4.png)
 observe $c$ "blocks" the path from $a$ to $b$
 
 ### head-to-head
-
+![h2h](images/image-5.png)
 conditioning induce a dependency
 
 When node c is unobserved, it ‘blocks’ the path, and the variables a and b are independent. However, conditioning on c ‘unblocks’ the path and renders a and b dependent.
+
+For example, in the "Gauge, battery, fuel" example, $\Pr(F=0 \mid G=0, B=0) < \Pr(F=0 \mid G=0)$. Observe no battery "explain away" no gauge.
 
 #### Naïve Bayes
 
