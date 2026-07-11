@@ -379,3 +379,106 @@ If every conditional independence statement **implied by a graph** is satisfied 
 ![venn diagram of perfect map](images/image-9.png)
 
 chain graphs
+
+## Inference
+
+### Chain
+
+![chain](images/x_1.png)
+
+$$
+\begin{aligned}
+p(x_n)
+&=
+\frac{1}{Z}
+  \underbrace{
+    \left[
+    \sum_{x_{n-1}}
+    \psi_{n-1,n}(x_{n-1},x_n)
+    \cdots
+    \sum_{x_2}
+    \psi_{2,3}(x_2,x_3)
+    \left[
+    \sum_{x_1}
+    \psi_{1,2}(x_1,x_2)
+    \right]
+    \cdots
+    \right]
+  }_{\mu_{\alpha}(x_n)}
+\\[1ex]
+&\qquad\times
+  \underbrace{
+    \left[
+    \sum_{x_{n+1}}
+    \psi_{n,n+1}(x_n,x_{n+1})
+    \cdots
+    \sum_{x_N}
+    \psi_{N-1,N}(x_{N-1},x_N)
+    \cdots
+    \right]
+  }_{\mu_{\beta}(x_n)}.
+\end{aligned}
+$$
+
+The marginal $p(x_n)$ decomposes into the **product** of 2 factors times the normalization constant.
+
+each of the messages comprises a set of K values, one for each choice of xn, and so the product of two messages should be interpreted as the **point-wise multiplication** of the elements of the two messages to give another set of K values.
+
+This is a Markov chains
+![message](images/image-10.png)
+
+If some of the nodes in the graph are observed, then the corresponding variables are simply clamped to their observed values and there is **no summation**.
+
+
+??? example "8.15"
+    ![8.15](images/image-11.png)
+
+    To obtain the joint marginal of two neighboring variables $x_{n-1}$ and $x_n$, sum out every other variable:
+    $$
+    p(x_{n-1},x_n)
+    =
+    \sum_{x_1,\ldots,x_{n-2}}
+    \sum_{x_{n+1},\ldots,x_N}
+    p(x_1,\ldots,x_N).
+    $$
+
+    $$
+    \begin{aligned}
+    p(x_{n-1},x_n)
+    &=
+    \frac{1}{Z}
+    \sum_{x_1,\ldots,x_{n-2}}
+    \sum_{x_{n+1},\ldots,x_N}
+    \prod_{i=1}^{N-1}\psi_{i,i+1}(x_i,x_{i+1}).
+    \end{aligned}
+    $$
+
+??? example "8.18"
+    ![8.18](images/image-12.png)
+
+    N
+
+### Factor graph
+
+$$
+p(\mathbf{x}) = \prod_s f_s(\mathbf{x_s})
+$$
+
+In a factor graph, there is 
+
+- a node (depicted as usual by a circle) for every variable in the distribution, as was the case for directed and undirected graphs. 
+- additional nodes (depicted by small squares) for each factor fs(xs) in the joint distribution. 
+- undirected links connecting each factor node to all of the variables nodes on which that factor depends.
+
+![factor](images/image-13.png)
+create additional factor nodes corresponding to the maximal cliques $\mathbf{x}_s$.
+![factor](images/image-14.png)
+create factor nodes corresponding to the conditional distributions
+
+multiple different factor graphs can represent the same directed or undirected graph.
+
+messages from factor node $f_s$ to variable node $x$. 
+
+$$
+\mu_{f_s \rightarrow x}(x) \equiv \sum_{X_s}F_s(x, X_s)
+$$
