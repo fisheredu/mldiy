@@ -1,8 +1,9 @@
 # Graphical Model
 
-- [X] 8.1. Bayesian Networks
+- [X] 8.1 Bayesian Networks
 - [X] 8.2 Conditional Independence
-- [ ] 8.3 Markov Random Field
+- [X] 8.3 Markov Random Field
+- [ ] 8.4 Inference in Graphical Models
 
 A graph comprises **nodes** (also called vertices) connected by **links** (also known as edges or arcs). 
 
@@ -277,13 +278,13 @@ The set of nodes comprising the parents, the children and the **co-parents** is 
 
 A Markov random field, also known as a _Markov network_ or an _undirected graphical model_
 
-Denote a clique by $C$ and the set of variables in that clique by $\mathbf{x}_C$. The joint distribution is a product of **potential function** $\psi_C(\mathbf{x}_C)$ over the maximal clique**s** of the graph.
+Denote a clique by $C$ and the set of variables in that clique by $\mathbf{x}_C$. The joint distribution is a product of ***potential function*** $\psi_C(\mathbf{x}_C) \ge 0$ over the **maximal** clique**s** of the graph.
 
 $$
 p(\mathbf{x}) = \frac{1}{Z}\prod_C \psi_C(\mathbf{x}_C)
 $$
 
-Here $Z= \sum_\mathbf{x}  \prod_C \psi_C(\mathbf{x}_C)$ is the normalization constant.
+Here $Z= \sum_\mathbf{x}  \prod_C \psi_C(\mathbf{x}_C)$ is the partition function (normalization constant).
 
 $Z$ is needed for parameter learning as $\nabla_\theta \log p(x;\theta)=\sum_C \nabla_\theta \log \psi_C(x_C;\theta)-{\color{blue}\nabla_\theta \log Z(\theta)}$
 
@@ -292,3 +293,89 @@ $Z$ is not needed in conditional distribution $p(x_i\mid x_{-i})$
 !!! warning "No interpretation"
     We do not restrict the choice of potential functions to those that have a specific probabilistic interpretation as marginal or conditional distributions.
 
+A potential function is an arbitary, **nonnegative** function over **a** maximal clique $\mathcal{C}$.
+
+
+### Energy Function
+
+| Potential Fucntion $\psi_C$ | Energy Function $E_C$ |
+|----------------------------|----------------------|
+| how compatible a particular configuration of variables in that clique is. | a real-valued score of how undesirable or incompatible a configuration is |
+
+Potential functions are often expressed using an energy function:
+
+$$
+\psi_C(\mathbf{x}_C)
+=
+\exp\left\{-E_C(\mathbf{x}_C)\right\}
+$$
+
+Therefore $E_C(\mathbf{x}_C) = -\log \psi_C(\mathbf{x}_C)$ and $p(\mathbf{x}) = \frac{1}{Z}\exp\left\{-\sum_CE_C(\mathbf{x}_C)\right\}$
+
+Define the total energy as $E(\mathbf{x}) = \sum_C E_C(\mathbf{x}_C)$, then $p(\mathbf{x}) = \frac{1}{Z}\exp\{-E(\mathbf{x})\}$.
+
+$$
+\boxed{
+\text{high potential}
+\iff
+\text{low energy}
+\iff
+\text{high probability}
+}
+$$
+
+Ising model
+
+algorithm for finding high probability solutions
+
+- ICM iterated conditional modes
+- max-product algorithm
+- graph cuts (global maximum)
+
+??? example "8.13"
+    ![8.13](images/image-6.png)
+
+    $E(x, y) = h \sum_i x_i - \beta \sum_{\{i, j\}}x_i x_j - \eta \sum_i x_i y_i \quad (8.42)$
+
+    for a particular variable $x_j$, $\Delta E = E_{x_j = 1} - E_{x_j = -1} = 2h -2\beta\sum_{i\in\mathrm{Neighbor}(j)}x_i -2\eta y_j.$
+
+??? example "8.14"
+    ![8.14](images/image-7.png)
+    $E(x, y) = - \eta \sum_i x_i y_i$.
+    To make $x_i y_i = 1$, we have $\mathrm{sign}(x_i) = \mathrm{sign}(y_i)$
+
+### Relation to directed graphs
+
+#### directed graph into undirected graph
+
+Anachronistically, this process of ‘marrying the parents’ has become known as moralization, and the resulting undirected graph, after dropping the arrows, is called the moral graph. The process of moralization adds the fewest extra links and so retains the maximum number of independence properties.
+
+It is important to observe that the moral graph in this example is fully connected and so exhibits no conditional independence properties, in contrast to the original directed graph. In going from a directed to an undirected representation we had to discard some conditional independence properties from the graph
+
+![moral graph](images/image-8.png)
+
+For a general DAG, $\sum_{x_j} p(x_j\mid \operatorname{pa}(x_j)) = 1.$ so $\sum_{\mathbf{x}}\prod_i p(x_i\mid\operatorname{pa}(x_i)) = \sum_{\mathbf{x}} p(\mathbf{x})=1.$ If we initialize every clique potential to 1 after moralization, 
+
+$$
+\psi_C(\mathbf{x}_C)
+\leftarrow
+\psi_C(\mathbf{x}_C)
+p(x_i\mid \operatorname{pa}(x_i)).
+$$
+
+Then the undirected representation is 
+$$
+p(\mathbf{x})
+=
+\frac{1}{Z} \prod_C\psi_C(\mathbf{x}_C)
+$$
+
+With $Z = \sum_{\mathbf{x}} \prod_C\psi_C(\mathbf{x}_C) = \sum_{\mathbf{x}}p(\mathbf{x}) = 1$
+
+A graph is said to be a D map (for ‘dependency map’) of a distribution if every conditional independence statement **satisfied by the distribution** is reflected in the graph.
+
+If every conditional independence statement **implied by a graph** is satisfied by a specific distribution, then the graph is said to be an I map (for ‘independence map’) of that distribution.
+
+![venn diagram of perfect map](images/image-9.png)
+
+chain graphs
