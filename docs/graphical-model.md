@@ -3,7 +3,7 @@
 - [X] 8.1 Bayesian Networks
 - [X] 8.2 Conditional Independence
 - [X] 8.3 Markov Random Field
-- [ ] 8.4 Inference in Graphical Models
+- [X] 8.4 Inference in Graphical Models
 
 A graph comprises **nodes** (also called vertices) connected by **links** (also known as edges or arcs). 
 
@@ -670,5 +670,9 @@ For the chain, we can use algorithm $x_{n-1}^{\max}=\phi(x_n^{\max})$ (back-trac
 
 ![back tracking](images/image-19.png)
 
+??? example "8.29"
+    ![8.29](images/image-20.png)
 
+    a (variable or factor) node $a$ has a message **pending** on its link to a node $b$ if node $a$ has received any message on any of its other links since the last time it send a message to $b$.
 
+    For graphs that have a tree structure, any schedule that sends only pending messages will eventually terminate once a message has passed in each direction across every link.
