@@ -470,6 +470,11 @@ In a factor graph, there is
 - additional nodes (depicted by small squares) for each factor fs(xs) in the joint distribution. 
 - undirected links connecting each factor node to all of the variables nodes on which that factor depends.
 
+!!! info "factor graph"
+    In a factor graph, variable nodes are never directly connected to other variable nodes. Likewise, factor nodes are never directly connected to other factor nodes.
+
+    Edges are only allowed between a variable and a factor.
+
 ![factor](images/image-13.png)
 create additional factor nodes corresponding to the maximal cliques $\mathbf{x}_s$.
 ![factor](images/image-14.png)
@@ -477,8 +482,193 @@ create factor nodes corresponding to the conditional distributions
 
 multiple different factor graphs can represent the same directed or undirected graph.
 
+$F_s$ and $G_m$ are grouped **subtree** functions. They are not new nodes.
+
+$$
+F_s(x,X_s)
+=
+f_s(x,x_1,\ldots,x_M)
+\prod_{m=1}^{M}
+G_m(x_m,X_{sm})
+$$
+
+contribution of the whole subtree on the $f_s$ side. $X_s$ is the collection of all variables in the subtree on the $f_s$-side, excluding the variable $x$ receiving the message.
+
+$$
+G_m(x_m,X_{sm})
+=
+\prod_{l\in \operatorname{ne}(x_m)\setminus f_s}
+F_l(x_m,X_{ml})
+$$
+
 messages from factor node $f_s$ to variable node $x$. 
 
 $$
 \mu_{f_s \rightarrow x}(x) \equiv \sum_{X_s}F_s(x, X_s)
 $$
+
+message from variable nodes to factor nodes
+
+$$
+\mu_{x_m \rightarrow f_s}(x_m) \equiv \sum_{X_{sm}}G_m(x_m, X_{sm})
+$$
+
+The result (8.66) says that to evaluate the message sent by a factor node to a variable node along the link connecting them, 
+
+1. take the product of the incoming messages along all other links coming into the factor node
+2. multiply by the factor associated with that node
+3. marginalize over all of the variables associated with the incoming messages
+   
+Target: evaluate marginal $p(x)$.
+
+1. initial $x$ as the root of the graph, initialize message at leaves of the graph by $\mu_{x \rightarrow f}(x) = 1$ and $\mu_{f \rightarrow x}(x) = f(x)$
+
+\begin{aligned}
+\mu_{f_s \to x}(x)
+&=
+\sum_{x_1} \cdots \sum_{x_M}
+f_s(x, x_1, \ldots, x_M)
+\prod_{m \in \operatorname{ne}(f_s)\setminus x}
+\left[
+\sum_{X_{x_m}}
+G_m(x_m, X_{s m})
+\right]
+\\
+&=
+\sum_{x_1} \cdots \sum_{x_M}
+f_s(x, x_1, \ldots, x_M)
+\prod_{m \in \operatorname{ne}(f_s)\setminus x}
+\mu_{x_m \to f_s}(x_m).
+\end{aligned}
+
+
+\begin{aligned}
+\mu_{x_m \to f_s}(x_m)
+&=
+\prod_{l \in \operatorname{ne}(x_m)\setminus f_s}
+\left[
+\sum_{X_{ml}}
+F_l(x_m, X_{ml})
+\right]
+\\
+&=
+\prod_{l \in \operatorname{ne}(x_m)\setminus f_s}
+\mu_{f_l \to x_m}(x_m).
+\end{aligned}
+
+\[
+\begin{aligned}
+p(x)
+&=
+\prod_{s \in \operatorname{ne}(x)}
+\left[
+\sum_{X_s}
+F_s(x, X_s)
+\right]
+\\
+&=
+\prod_{s \in \operatorname{ne}(x)}
+\mu_{f_s \to x}(x).
+\end{aligned}
+\]
+
+![inward-outward](images/image-17.png)
+
+Outward pass: root to leaves
+
+After the outward pass, every edge has carried two messages:
+$$
+x\to f
+\qquad\text{and}\qquad
+f\to x.
+$$
+
+??? example "8.20"
+    ![8.20](images/image-15.png)
+
+    This is a tree-structured factor graph. $p(x) = \prod_{s \in \operatorname{ne}(x)}\mu_{f_s \to x}(x)$
+
+![8.21](images/image-16.png)
+
+
+For a Bayesian network, the joint $p(\mathbf{x}) = \prod_i p(x_i \mid \operatorname{pa}(x_i))$ is a product of normalized conditionals, so it is already normalized and the marginals from sum-product need no further normalization.
+
+For an undirected graphical model, we start from an unnormalized product of potentials:
+
+$$
+\widetilde{p}(\mathbf{x})
+=
+\prod_s \psi_s(\mathbf{x}_s)
+=
+Zp(\mathbf{x}),
+\qquad
+Z
+=
+\sum_{\mathbf{x}} \widetilde{p}(\mathbf{x}).
+$$
+
+Computing $Z$ directly is expensive: the sum runs over every joint assignment.
+
+Running sum-product on \(\widetilde{p}(\mathbf{x})\) gives an unnormalized marginal:
+
+$$
+\widetilde{p}(x_i)
+=
+\sum_{\mathbf{x}\setminus x_i}
+\widetilde{p}(\mathbf{x})
+=
+Z
+\sum_{\mathbf{x}\setminus x_i}
+p(\mathbf{x})
+=
+Zp(x_i).
+$$
+
+Summing it over $x_i$ alone recovers $Z$, since $\sum_{x_i}\widetilde{p}(x_i) = Z\sum_{x_i}p(x_i) = Z$. Hence
+
+$$
+p(x_i)
+=
+\frac{
+\widetilde{p}(x_i)
+}{
+\sum_{x_i}\widetilde{p}(x_i)
+}.
+$$
+
+This is efficient: we normalize over a **single variable** instead of the entire joint state space.
+
+!!! example "Z"
+    For example, if $x_i$ is binary and sum-product gives $\widetilde{p}(x_i=0)=6$ and $\widetilde{p}(x_i=1)=4$, then $Z = 10$, so $p(x_i=0)=0.6$ and $p(x_i=1)=0.4$. The same $Z$ applies to all marginals, since they all come from the same unnormalized joint.
+
+
+### Max-sum
+
+find a setting of the variables that "jointly" has the largest probability and to find the value of that probability
+
+$$
+\mathbf{x}^{\max} = \arg\max_{\mathbf{x}} p(\mathbf{x})
+$$
+
+!!! warning "individually & jointly"
+    run the sum-product algorithm to obtain the marginals $p(x_i)$ for every variable, and then, for each marginal in turn, to find the value $x_i^*$ that maximizes that marginal will not return $\mathbf{x}^{\max}$.
+
+$$
+\max p(\mathbf{x}) = \max_{x_1}\ldots\max_{x_M}p(\mathbf{x})
+$$
+
+??? example "8.27"
+    ![8.27](images/image-18.png)
+
+    |   | 0 | 1 | 2 |
+    |---|---|---|---|
+    | 0 | 0 |0.4| 0 |
+    | 1 |0.4| 0 |0.1|
+    | 2 | 0 |0.1| 0 |
+
+For the chain, we can use algorithm $x_{n-1}^{\max}=\phi(x_n^{\max})$ (back-tracking)
+
+![back tracking](images/image-19.png)
+
+
+
