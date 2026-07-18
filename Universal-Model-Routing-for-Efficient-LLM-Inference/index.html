@@ -1,0 +1,1661 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://mydomain.org/Universal-Model-Routing-for-Efficient-LLM-Inference/">
+      
+      
+        <link rel="prev" href="../EM/">
+      
+      
+        <link rel="next" href="../allofstat/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Universal Model Routing for Efficient LLM Inference - ML NOTES</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/graphical-model.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#universal-model-routing-for-efficient-llm-inference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ML NOTES" class="md-header__button md-logo" aria-label="ML NOTES" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ML NOTES
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Universal Model Routing for Efficient LLM Inference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ML NOTES" class="md-nav__button md-logo" aria-label="ML NOTES" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ML NOTES
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome to MLDiY
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../EM/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 9: Mixture Models and EM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Universal Model Routing for Efficient LLM Inference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Universal Model Routing for Efficient LLM Inference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#routering-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routering Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-llms-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic LLMs Pool
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic LLMs Pool">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#target-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Objective
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimal-dynamic-pool-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimal Dynamic Pool Routing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimal Dynamic Pool Routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#assume-0-1-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assume 0-1 Loss
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main Idea
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-feature-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM Feature Vector
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-handles-new-llms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Handles New LLMs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-based-uniroute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster-Based UniRoute
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster-Based UniRoute">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-cluster-training-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Cluster training prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-compute-per-cluster-llm-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Compute per-cluster LLM errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-based-estimator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster-Based Estimator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learned-cluster-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learned Cluster Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experiment-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Experiment Logic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experiment Logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM split
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example split
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Experiments
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experiments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baseline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../allofstat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../approximate-inference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 10: Approximate Inference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../calibration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calibration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../concept-inductive-bias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concept inductive bias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../decision-theory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dirichlet-distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Dirichlet Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../distribution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distribution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphical-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graphical Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inequality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inequality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1: Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linear-algebra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ltd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning to defer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../measure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sample-efficient-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sample Efficient Learning of Predictors that Complement Humans
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sampling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sampling Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ucb-189/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ucb 189
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#routering-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routering Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-llms-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic LLMs Pool
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic LLMs Pool">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#target-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Objective
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimal-dynamic-pool-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimal Dynamic Pool Routing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optimal Dynamic Pool Routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#assume-0-1-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assume 0-1 Loss
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main Idea
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-feature-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM Feature Vector
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-handles-new-llms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Handles New LLMs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-based-uniroute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster-Based UniRoute
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster-Based UniRoute">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-cluster-training-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Cluster training prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-compute-per-cluster-llm-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Compute per-cluster LLM errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-based-estimator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster-Based Estimator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learned-cluster-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learned Cluster Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experiment-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Experiment Logic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experiment Logic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM split
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example split
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Experiments
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experiments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baseline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="universal-model-routing-for-efficient-llm-inference">Universal Model Routing for Efficient LLM Inference</h1>
+<blockquote>
+<p>📄 <strong>Paper:</strong> <a href="https://arxiv.org/pdf/2502.08773">Universal Model Routing for Efficient LLM Inference (arXiv:2502.08773)</a></p>
+</blockquote>
+<p>Assume <span class="arithmatex">\((x, y) \sim \mathbb{P}\)</span>, where x is the prompt and y is the correct answers</p>
+<div class="arithmatex">\[
+\begin{aligned}
+\min_{r:\mathcal X \to [M]}
+\quad
+&amp; \sum_{m \in [M]}
+\mathbb E_{(x,y)}
+\left[
+\mathbf 1(r(x)=m)\cdot \ell(x,y,h^{(m)})
+\right] \\
+\text{s.t.}
+\quad
+&amp; \sum_{m \in [M]}
+\mathbb E_{(x,y)}
+\left[
+\mathbf 1(r(x)=m)\cdot c^{(m)}
+\right]
+\le B .
+\end{aligned}
+\]</div>
+<p>That is, we try to minimize the expected loss over routed LLM, while keeping the expected query cost under budget <span class="arithmatex">\(B\)</span>.</p>
+<h2 id="routering-strategies">Routering Strategies</h2>
+<p>For a fixed set of LLM <span class="arithmatex">\(\{p^{(m)}\}_{m \in [M]}\)</span></p>
+<p>we learn a router that routes via</p>
+<div class="arithmatex">\[\begin{equation}
+r(x) = \arg\min_{m\in [M]} [\gamma^{(m)}(x) + \lambda c^{(m)}]
+\end{equation}\]</div>
+<p><span class="arithmatex">\(\lambda\)</span> is hyperparameter</p>
+<ul>
+    <li> randomly assigns prompts to the various models</li>
+    <li> estimate the expected loss of model m on prompt x. \(\gamma^{(m)}_{\mathrm{lin}}(x)\) </li>
+    <li> k-NN estimater \(\gamma^{(m)}_{\mathrm{kNN}}(x)\) </li>
+</ul>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="arithmatex">\(\gamma^{(m)}_{\mathrm{kNN}}(x) = \frac{1}{k} \sum _{i \in NN(x, k)} \ell(x^{(i)}, y^{(i)}, p^{(m)})\)</span> where <span class="arithmatex">\(NN(x, k)\)</span> denotes the k-th nearest neighbor<strong>s</strong> of (the embeddings of) <span class="arithmatex">\(x\)</span> in <span class="arithmatex">\(S_{tr}\)</span></p>
+</div>
+<h2 id="dynamic-llms-pool">Dynamic LLMs Pool</h2>
+<p>Static routing estimates model-specific loss: <span class="arithmatex">\(\gamma^{(m)}(x)\)</span></p>
+<p>This only works for a fixed LLM pool. If a new LLM appears, the router has no output for it. <strong>UniRoute instead estimates: <span class="arithmatex">\(\gamma(x,h)\)</span></strong>, meaning: expected loss of model <span class="arithmatex">\(h\)</span> on prompt <span class="arithmatex">\(x\)</span>.</p>
+<div class="arithmatex">\[
+\mathcal H_{\text{all}}
+=
+\{
+\text{GPT-4}, \text{Claude}, \text{Gemini}, \text{Llama}, \text{Mistral}, \dots
+\}
+\]</div>
+<div class="arithmatex">\[
+\mathbb H
+=
+\text{set of all possible sets of LLMs (superset)}
+\]</div>
+<p>During training, you observe one set of models: <span class="arithmatex">\(\mathcal H_{\text{tr}}=\{h_{\text{tr}}^{(1)},\dots,h_{\text{tr}}^{(M)}\}\)</span></p>
+<p>During evaluation/testing, you may need to route among another set: <span class="arithmatex">\(\mathcal H_{\text{te}} = \{h_{\text{te}}^{(1)},\dots,h_{\text{te}}^{(N)}\}\)</span></p>
+<p>We assume <span class="arithmatex">\(\mathcal{H}_{\text{tr}} \sim \mathfrak{H}\)</span>, where <span class="arithmatex">\(\mathfrak{H}\)</span> is a <em>meta-distribution</em> over <span class="arithmatex">\(\mathbb{H}\)</span></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>meta-distribution means a distribution over model pools, not over prompt or single model.</p>
+</div>
+<p>If:
+<span class="arithmatex">\(\mathcal H_{\text{tr}}=\mathcal H_{\text{te}}\)</span>
+then it is the normal/static routing problem.</p>
+<p>But they want to allow:
+<span class="arithmatex">\(\mathcal H_{\text{tr}}\ne \mathcal H_{\text{te}}\)</span>
+Even more extreme:
+<span class="arithmatex">\(\mathcal H_{\text{tr}}\cap \mathcal H_{\text{te}}=\emptyset\)</span></p>
+<p>Now the router becomes:</p>
+<p>$$
+r(\cdot,\mathcal H):\mathcal X \to [|{\color{red}\mathcal H}|]
+$$
+This means the router takes two things:
+$$
+r(x, {\color{red}\mathcal H})
+$$
+where:</p>
+<ul>
+<li>x is the input prompt</li>
+<li><span class="arithmatex">\({\color{red}\mathcal H}\)</span> is the current candidate set of LLMs</li>
+</ul>
+<p>Then it returns an index:
+$$
+r(x,\mathcal H)=m
+$$
+meaning: For prompt x, among the models in <span class="arithmatex">\(\mathcal H\)</span>, choose the m-th model.</p>
+<p>The dynamic routing rule is:</p>
+<div class="arithmatex">\[
+r(x,\mathcal H_{\text{te}})
+=
+\arg\min_{h\in\mathcal H_{\text{te}}}
+\left[
+\gamma(x,h)+\lambda c(h)
+\right]
+\]</div>
+<h3 id="target-objective">Target Objective</h3>
+<div class="arithmatex">\[
+\min_{r\in\mathcal R}
+\mathbb E
+\left[
+\sum_{m\in[|\mathcal H|]}
+\mathbf 1(r(x,\mathcal H)=m)
+\cdot
+\ell(x,y,h^{(m)})
+\right]
+\]</div>
+<p>subject to:
+$$
+\mathbb E
+\left[
+\sum_{m\in[|\mathcal H|]}
+\mathbf 1(r(x,\mathcal H)=m)
+\cdot
+c(h^{(m)})
+\right]
+\le B
+$$</p>
+<p>Choose a dynamic router r that minimizes expected loss, while keeping expected cost under budget B.</p>
+<p>The <strong>expectation</strong> is over: <span class="arithmatex">\((x,y,\mathcal H)\)</span></p>
+<p>So randomness comes from both:</p>
+<ol>
+<li>the prompt-answer pair (x,y)</li>
+<li>the available LLM set <span class="arithmatex">\(\mathcal H\)</span></li>
+</ol>
+<h3 id="optimal-dynamic-pool-routing">Optimal Dynamic Pool Routing</h3>
+<p>“Under a mild regularity condition on <span class="arithmatex">\(\mathbb{P}\)</span>” is a technical assumption needed to justify converting the constrained optimization problem into a <strong>Lagrangian form</strong>.</p>
+<p>LLM candidat set <span class="arithmatex">\(\mathcal{H} \in \mathbb{H}\)</span>, lagrange multiplier <span class="arithmatex">\(\lambda_{\mathfrak{H}} \ge 0\)</span></p>
+<div class="arithmatex">\[
+r^*(x,\mathcal{H})
+=
+\arg\min_{m \in [|\mathcal{H}|]}
+\left[
+\mathbb{E}_{y \mid x}
+\left[
+\ell(x,y,h^{(m)})
+\right]
++
+\lambda_{\mathfrak{H}} \cdot c(h^{(m)})
+\right]
+\]</div>
+<h4 id="assume-0-1-loss">Assume 0-1 Loss</h4>
+<div class="arithmatex">\[
+r^*(x,\mathcal{H})
+=
+\arg\min_{m \in [|\mathcal{H}|]}
+\left[
+\mathbb{P}[y \neq h^{(m)}(x) \mid x]
++
+\lambda_{\mathfrak{H}} \cdot c(h^{(m)})
+\right]
+\]</div>
+<h2 id="main-idea">Main Idea</h2>
+<p>Represent both prompts and LLMs as vectors:</p>
+<div class="arithmatex">\[
+\Phi(x)\in\mathbb R^K
+\]</div>
+<div class="arithmatex">\[
+\Psi(h)\in\mathbb R^K
+\]</div>
+<p>Then estimate loss by dot product:</p>
+<div class="arithmatex">\[
+\gamma_{\text{uni}}(x,h)
+=
+\Phi(x)^\top \Psi(h)
+\]</div>
+<p>where:</p>
+<ul>
+<li><span class="arithmatex">\(\Phi(x)\)</span>: what kind of prompt <span class="arithmatex">\(x\)</span> is</li>
+<li><span class="arithmatex">\(\Psi(h)\)</span>: what kind of prompts model <span class="arithmatex">\(h\)</span> is good/bad at</li>
+</ul>
+<h2 id="llm-feature-vector">LLM Feature Vector</h2>
+<p>Use a small validation set:</p>
+<div class="arithmatex">\[S_{\text{val}}=\{(x^{(j)},y^{(j)})\}_{j=1}^{N_{\text{val}}}\]</div>
+<p>Run model <span class="arithmatex">\(h\)</span> on each validation prompt and record whether it is wrong:</p>
+<div class="arithmatex">\[\left(\mathbf 1(y^{(j)}\ne h(x^{(j)}))\right)_{j\in[N_{\text{val}}]}\]</div>
+<p>Example:</p>
+<div class="arithmatex">\[[\text{wrong},\text{correct},\text{correct},\text{wrong}]\rightarrow[1,0,0,1]\]</div>
+<p>More generally:</p>
+<div class="arithmatex">\[\Psi(h)=F\left(\left(\mathbf 1(y^{(j)}\ne h(x^{(j)}))\right)_{j\in[N_{\text{val}}]}\right)\]</div>
+<h2 id="why-this-handles-new-llms">Why This Handles New LLMs</h2>
+<p>For a new model <span class="arithmatex">\(h_{\text{new}}\)</span>:</p>
+<ol>
+<li>Run it on <span class="arithmatex">\(S_{\text{val}}\)</span></li>
+<li>Compute <span class="arithmatex">\(\Psi(h_{\text{new}})\)</span></li>
+<li>Use the same routing rule:</li>
+</ol>
+<div class="arithmatex">\[\gamma(x,h_{\text{new}})=\Phi(x)^\top \Psi(h_{\text{new}})\]</div>
+<p>So no router retraining is needed.</p>
+<h2 id="cluster-based-uniroute">Cluster-Based UniRoute</h2>
+<p>Instead of using every validation example directly, group prompts into <span class="arithmatex">\(K\)</span> clusters.</p>
+<h3 id="step-1-cluster-training-prompts">Step 1: Cluster training prompts</h3>
+<p>Use prompt embeddings <span class="arithmatex">\(\phi(x)\)</span> and run K-means to get <span class="arithmatex">\(K\)</span> clusters.</p>
+<p>Each prompt gets cluster membership:</p>
+<div class="arithmatex">\[
+\Phi_{\text{clust}}(x)\in\{0,1\}^K
+\]</div>
+<p>Example:</p>
+<div class="arithmatex">\[
+\Phi_{\text{clust}}(x)=[0,1,0]
+\]</div>
+<p>means prompt <span class="arithmatex">\(x\)</span> belongs to cluster 2.</p>
+<h3 id="step-2-compute-per-cluster-llm-errors">Step 2: Compute per-cluster LLM errors</h3>
+<p>For cluster <span class="arithmatex">\(k\)</span>:</p>
+<div class="arithmatex">\[
+C_k=\{(x,y)\in S_{\text{val}}:\Phi_{\text{clust},k}(x)=1\}
+\]</div>
+<p>For model <span class="arithmatex">\(h\)</span>:</p>
+<div class="arithmatex">\[
+\Psi_{\text{clust},k}(h)=\frac{1}{|C_k|}\sum_{(x,y)\in C_k}\mathbf 1(y\ne h(x))
+\]</div>
+<p>So <span class="arithmatex">\(\Psi_{\text{clust}}(h)\)</span> is the vector of average errors across clusters.</p>
+<h2 id="cluster-based-estimator">Cluster-Based Estimator</h2>
+<div class="arithmatex">\[
+\gamma_{\text{clust}}(x,h)=\Phi_{\text{clust}}(x)^\top\Psi_{\text{clust}}(h)
+\]</div>
+<p>If:</p>
+<div class="arithmatex">\[
+\Phi_{\text{clust}}(x)=[0,1,0],\qquad \Psi_{\text{clust}}(h)=[0.2,0.6,0.1]
+\]</div>
+<p>then:</p>
+<div class="arithmatex">\[
+\gamma_{\text{clust}}(x,h)=0.6
+\]</div>
+<p>Meaning: model <span class="arithmatex">\(h\)</span>'s estimated error on this prompt is its average error on cluster 2.</p>
+<h2 id="learned-cluster-map">Learned Cluster Map</h2>
+<p>Instead of hard cluster assignment:</p>
+<div class="arithmatex">\[
+\Phi_{\text{clust}}(x)\in\{0,1\}^K
+\]</div>
+<p>the paper can learn a soft assignment:</p>
+<div class="arithmatex">\[
+\Phi_{\text{clust}}(x;\theta)\in[0,1]^K
+\]</div>
+<p>Example:</p>
+<div class="arithmatex">\[
+\Phi_{\text{clust}}(x;\theta)=[0.1,0.7,0.2]
+\]</div>
+<p>This means the prompt partly belongs to multiple clusters.</p>
+<h2 id="experiment-logic">Experiment Logic</h2>
+<p>There are two splits.</p>
+<h3 id="llm-split">LLM split</h3>
+<div class="arithmatex">\[
+\mathcal H_{\text{tr}}\quad\text{and}\quad\mathcal H_{\text{te}}
+\]</div>
+<p>This tests generalization to unseen LLMs.</p>
+<h3 id="example-split">Example split</h3>
+<div class="arithmatex">\[
+S_{\text{tr}},S_{\text{val}},S_{\text{test}}
+\]</div>
+<p><span class="arithmatex">\(S_{\text{tr}}\)</span> trains the router or clusters, <span class="arithmatex">\(S_{\text{val}}\)</span> computes LLM feature vectors <span class="arithmatex">\(\Psi(h)\)</span>, and <span class="arithmatex">\(S_{\text{test}}\)</span> is used for final evaluation.</p>
+<p>Validation and test examples are different, but validation and testing use the same test-time LLM pool <span class="arithmatex">\(\mathcal H_{\text{te}}\)</span>, because the router must compute feature vectors for the same LLMs it will route among.</p>
+<h2 id="experiments">Experiments</h2>
+<p>Val examples and test examples are different</p>
+<p>Val LLM pool and test LLM pool are same <span class="arithmatex">\(\mathcal{H}_{te}\)</span></p>
+<h3 id="baseline">Baseline</h3>
+<p>For the oracle baseline, they cheat a little for comparison. They assume the router already knows both training and testing LLMs during training.</p>
+<p>So instead of training on only: <span class="arithmatex">\(\mathcal H_{\text{tr}}\)</span>, the oracle trains using: <span class="arithmatex">\(\mathcal H_{\text{tr}} \cup \mathcal H_{\text{te}}\)</span></p>
+<p>That means it has outputs for both seen and unseen LLMs. This is not allowed in the real dynamic setting, because test LLMs are supposed to be unseen. But it gives an upper bound: “how good could this baseline be if it had access to the test LLMs during training?”</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js"></script>
+      
+        <script src="../js/graphviz-render.js"></script>
+      
+        <script src="../js/mathjax-config.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
