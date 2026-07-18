@@ -8,6 +8,8 @@ $$
 
 For a Gaussian over a vector $\mathbf{x} \in \mathbb{R}^D$:
 
+https://peterroelants.github.io/posts/multivariate-normal-primer/
+
 $$
 \mathcal N(\mathbf{x} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})
 =
@@ -169,4 +171,16 @@ It measures how concentrated and certain the distribution is. In 1-D it's recipr
 - If q is high and p is low then we pay a price.
 - If q is low then we don’t care (because of the expectation)
 
+## Gamma Distribution
+
+![gamma](images/image-21.png)
+
+For
+
+$$
+\mathrm{Gam}(x \mid \alpha, \beta)=\frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x},
+\qquad x\ge 0,
+$$
+
+highest point occurs at $\boxed{x_{\max}=\frac{\alpha-1}{\beta}}$
 
